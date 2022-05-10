@@ -10,7 +10,7 @@ struct Arr{
 
 void init_arr(struct Arr *pArr,int len);//初始化 
 bool append_arr(struct Arr *pArr,int val);//追加 
-bool insert_arr();//插入 
+bool insert_arr(struct Arr *pArr,int pos,int val);//插入 
 bool delete_arr();//删除 
 bool is_empty(struct Arr *pArr);//是否为空 
 bool is_full(struct Arr *pArr);//是否为满 
@@ -33,11 +33,14 @@ int main()
 	append_arr(&arr,3);
 	append_arr(&arr,4);
 	append_arr(&arr,5);
-	append_arr(&arr,6);
+	//append_arr(&arr,6);
 	
 	
 	
 	show_arr(&arr);
+	insert_arr(&arr,3,10);
+	show_arr(&arr);
+	
 	return 0;
 }
 
@@ -93,6 +96,28 @@ bool append_arr(struct Arr *pArr,int val)
 	}
 }
 
+//插入元素
+bool insert_arr(struct Arr *pArr,int pos,int val)
+{
+	//判断输入pos位置是否合法 
+	if(is_full(pArr))
+	{
+		return false;
+	}else if(pos<1||pos>pArr->cnt+1||pos>pArr->len){
+		return false;
+	}
+	//先将pos位置既后面的元素后移，然后插入 
+	int i=0;
+	for(i=pArr->cnt-1;i>pos-1;--i)
+	{
+		pArr->pBase[i+1]=pArr->pBase[i];
+	}
+	pArr->pBase[pos-1]=val;
+	pArr->cnt++;
+	return true;
+}
+
+ 
 
 //输出全部元素 
 void show_arr(struct Arr *pArr)
