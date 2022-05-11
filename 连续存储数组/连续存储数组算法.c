@@ -11,7 +11,7 @@ struct Arr{
 void init_arr(struct Arr *pArr,int len);//初始化 
 bool append_arr(struct Arr *pArr,int val);//追加 
 bool insert_arr(struct Arr *pArr,int pos,int val);//插入 
-bool delete_arr();//删除 
+bool delete_arr(struct Arr *pArr,int pos,int *pVal);//删除 
 bool is_empty(struct Arr *pArr);//是否为空 
 bool is_full(struct Arr *pArr);//是否为满 
 void sort_arr();//排序 
@@ -21,7 +21,9 @@ void inversion_arr();//倒置
 int main()
 {
 	struct Arr arr;
+	int val;//定义一个要删除的值 
 	init_arr(&arr,6);
+	
 	show_arr(&arr);
 	if(append_arr(&arr,1))
 	{
@@ -40,6 +42,13 @@ int main()
 	show_arr(&arr);
 	insert_arr(&arr,3,10);
 	show_arr(&arr);
+	delete_arr(&arr,3,&val);
+	show_arr(&arr);
+	delete_arr(&arr,3,&val);
+	show_arr(&arr);
+	delete_arr(&arr,2,&val);
+	show_arr(&arr);
+	printf("%d ",val);
 	
 	return 0;
 }
@@ -107,17 +116,46 @@ bool insert_arr(struct Arr *pArr,int pos,int val)
 		return false;
 	}
 	//先将pos位置既后面的元素后移，然后插入 
-	int i=0;
-	for(i=pArr->cnt-1;i>pos-1;--i)
+	else
 	{
-		pArr->pBase[i+1]=pArr->pBase[i];
+		int i=0;
+		for(i=pArr->cnt-1;i>pos-1;--i)
+		{
+			pArr->pBase[i+1]=pArr->pBase[i];
+		}
+		pArr->pBase[pos-1]=val;
+		pArr->cnt++;
+		return true;
 	}
-	pArr->pBase[pos-1]=val;
-	pArr->cnt++;
-	return true;
+	
 }
 
- 
+//删除元素
+bool delete_arr(struct Arr *pArr,int pos,int *pVal)//pos从1开始 
+{
+	if(is_empty(pArr))
+	{
+		return false;
+	}
+	//判断pos位置是否合法 
+	else if(pos>pArr->cnt||pos<1)
+	{
+		return false;
+	}
+	else
+	{
+		*pVal=pArr->pBase[pos-1];
+		int i=0;
+		for(i=pos;i<pArr->cnt-1;++i)
+		{
+			pArr->pBase[i-1]=pArr->pBase[i];
+		}
+		pArr->cnt--;
+		return true;
+	}
+} 
+
+
 
 //输出全部元素 
 void show_arr(struct Arr *pArr)
